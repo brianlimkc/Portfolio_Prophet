@@ -4,7 +4,10 @@ from prophet import Prophet
 from datetime import date
 
 # Create your views here.
-def show_stock(request, stock):
+def show_stock(request):
+
+    stock = request.GET.get("stock")
+
 
     if stock==None:
         stock="GOOG"
@@ -47,6 +50,9 @@ def show_stock(request, stock):
     data.reset_index(inplace=True)
 
     df_train = data[['Date','Close']]
+    chart_data = data[['Close']].values.tolist()
+    flat_chart_data = [item for sublist in chart_data for item in sublist]
+    
     df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
 
     m = Prophet()
@@ -55,6 +61,7 @@ def show_stock(request, stock):
     forecast = m.predict(future)
     forecast_length = forecast.shape[0]
    
+    print(flat_chart_data)
 
     forecast_results = {
         "30_days_yhat" : round(forecast["yhat"][forecast_length-335],2),
@@ -74,7 +81,9 @@ def show_stock(request, stock):
         request, 
         "portfolio_test/index.html", 
         {"stock_result":stock_result,
-         "forecast_result" : forecast_results   
+         "forecast_result" : forecast_results,
+         "chart_data": flat_chart_data,
+         "forecast" : forecast
         }
         )
 

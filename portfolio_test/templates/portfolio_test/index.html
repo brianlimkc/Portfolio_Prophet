@@ -1,9 +1,55 @@
 {% extends 'portfolio_test/base.html' %}
 
+{% load static %}
+
 {% block content %} 
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"> </script>
+
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+<script type="text/javascript">
+window.onload = function () {
+
+let data = []
+
+chart_data = {{chart_data}}
+
+chart_data.forEach(el => {data.push({y:el})})
+
+console.log(data)
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	theme: "light1", // "light2", "dark1", "dark2"
+	animationEnabled: false, // change to true		
+	title:{
+		text: "Historical Price Chart"
+	},
+	data: [
+	{
+		// Change type to "bar", "area", "spline", "pie",etc.
+		type: "line",
+		dataPoints: data
+	}
+	]
+});
+chart.render();
+
+}
+</script>
+
 
 <div class="container">
 <div class="row">
+
+<div>
+<form action="{% url 'show_stock' %}" method="get">
+        <input name="stock" type="text" placeholder="Enter stock name..." />
+        <button class="btn btn-primary btn-sm mx-1" type="submit">Submit
+        </button>
+</form>
+</div>
+
 <div class="col-6">
 <table class="table">
         <tbody>
@@ -59,7 +105,13 @@
         </tbody>
       </table>
 
-      <table class="table">
+
+
+    </div>
+
+    <div class="col-6">
+
+          <table class="table">
       <thead>
       <tr>
       <th scope="col">Days</th>
@@ -93,7 +145,6 @@
       </tbody>
 
       </table>
-
     </div>
 </div>
 </div>

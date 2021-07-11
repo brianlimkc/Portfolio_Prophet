@@ -104,6 +104,14 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-chartjs"
+version = "2.2.1"
+description = "Django Chart.js and Hightchart ajax views"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "django-filter"
 version = "2.4.0"
 description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
@@ -448,7 +456,7 @@ requests = ">=2.20"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9ed860383653746b74e51609cf83cd1bc306b705ba0807ab5c48196f22fafb13"
+content-hash = "98fcc7c1c6cf6aca70f128cff05e77259125b712b7460e6b87c1bda935695773"
 
 [metadata.files]
 asgiref = [
@@ -519,6 +527,10 @@ cython = [
 django = [
     {file = "Django-3.2.5-py3-none-any.whl", hash = "sha256:c58b5f19c5ae0afe6d75cbdd7df561e6eb929339985dbbda2565e1cabb19a62e"},
     {file = "Django-3.2.5.tar.gz", hash = "sha256:3da05fea54fdec2315b54a563d5b59f3b4e2b1e69c3a5841dda35019c01855cd"},
+]
+django-chartjs = [
+    {file = "django-chartjs-2.2.1.tar.gz", hash = "sha256:f7af4107f0d34057d1b8cc63ec16e8edc1bb7be23663c7a614296492d4f396b2"},
+    {file = "django_chartjs-2.2.1-py3-none-any.whl", hash = "sha256:b434c4784c6af216a97b9f25f821bd08f6db70996a0ddc0e51cbcfb4b3937693"},
 ]
 django-filter = [
     {file = "django-filter-2.4.0.tar.gz", hash = "sha256:84e9d5bb93f237e451db814ed422a3a625751cbc9968b484ecc74964a8696b06"},
