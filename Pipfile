@@ -12,6 +12,7 @@ markdown = "*"
 django-filter = "*"
 djangorestframework-simplejwt = "*"
 yfinance = "*"
+pystan = "==2.19.1.1"
 
 [dev-packages]
 

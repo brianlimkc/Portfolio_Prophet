@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import yfinance as yf
+from prophet import Prophet
 from datetime import date
 
 # Create your views here.
@@ -8,12 +9,15 @@ def show_stock(request, stock):
     if stock==None:
         stock="GOOG"
         
-    START = "2020-01-01"
+    START = "2015-01-01"
     TODAY = date.today().strftime("%Y-%m-%d")
     stock_name = stock
 
     ticker = yf.Ticker(stock_name)
     stock_info = ticker.info
+
+    period = 1 * 365
+
 
     # data = yf.download(stock, START, TODAY)
     # data.reset_index(inplace=True)
@@ -38,7 +42,41 @@ def show_stock(request, stock):
         "percent_change" : round((stock_history["Close"][results_length-2] - stock_history["Close"][results_length-1])/100,2)
     }
 
-    return render(request, "portfolio_test/index.html", {"stock_result":stock_result})
+    
+    data = yf.download(stock_name, START, TODAY)
+    data.reset_index(inplace=True)
+
+    df_train = data[['Date','Close']]
+    df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
+
+    m = Prophet()
+    m.fit(df_train)
+    future = m.make_future_dataframe(periods=period)
+    forecast = m.predict(future)
+    forecast_length = forecast.shape[0]
+   
+
+    forecast_results = {
+        "30_days_yhat" : round(forecast["yhat"][forecast_length-335],2),
+        "30_days_yhat_lower" : round(forecast["yhat_lower"][forecast_length-335],2),
+        "30_days_yhat_upper" : round(forecast["yhat_upper"][forecast_length-335],2),
+        "180_days_yhat" : round(forecast["yhat"][forecast_length-185],2),
+        "180_days_yhat_lower" : round(forecast["yhat_lower"][forecast_length-185],2),
+        "180_days_yhat_upper" : round(forecast["yhat_upper"][forecast_length-185],2),
+        "365_days_yhat" : round(forecast["yhat"][forecast_length-1],2),
+        "365_days_yhat_lower" : round(forecast["yhat_lower"][forecast_length-1],2),
+        "365_days_yhat_upper" : round(forecast["yhat_upper"][forecast_length-1],2),
+    }
+
+    print(forecast_results)
+
+    return render(
+        request, 
+        "portfolio_test/index.html", 
+        {"stock_result":stock_result,
+         "forecast_result" : forecast_results   
+        }
+        )
 
 
 

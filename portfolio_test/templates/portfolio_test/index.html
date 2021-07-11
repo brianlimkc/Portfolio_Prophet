@@ -56,9 +56,44 @@
             <th scope="row">Low</th>
             <td>${{stock_result.low}}</td>
           </tr>
-
         </tbody>
       </table>
+
+      <table class="table">
+      <thead>
+      <tr>
+      <th scope="col">Days</th>
+      <th scope="col">Forecast Price</th>
+      <th scope="col">Upper Range</th>
+      <th scope="col">Lower Range</th>      
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr>
+        <th scope="row">30</th>
+        <th>${{forecast_result.30_days_yhat}}</th>
+        <th>${{forecast_result.30_days_yhat_upper}}</th>
+        <th>${{forecast_result.30_days_yhat_lower}}</th>
+      </tr>
+
+      <tr>
+        <th scope="row">180</th>
+        <th>${{forecast_result.180_days_yhat}}</th>
+        <th>${{forecast_result.180_days_yhat_upper}}</th>
+        <th>${{forecast_result.180_days_yhat_lower}}</th>
+      </tr>
+
+  <tr>
+        <th scope="row">365</th>
+        <th>${{forecast_result.365_days_yhat}}</th>
+        <th>${{forecast_result.365_days_yhat_upper}}</th>
+        <th>${{forecast_result.365_days_yhat_lower}}</th>
+        </tr>
+      </tbody>
+
+      </table>
+
     </div>
 </div>
 </div>
