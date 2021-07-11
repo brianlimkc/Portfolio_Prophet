@@ -1,0 +1,69 @@
+{% extends 'portfolio_test/base.html' %}
+
+{% block content %} 
+
+<div class="container">
+<div class="row">
+<div class="col-6">
+<table class="table">
+        <tbody>
+          <tr>
+            <th scope="row">Name</th>
+            <td>{{stock_result.name}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Symbol</th>
+            <td>{{stock_result.symbol}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Price</th>
+            <td>${{stock_result.currentPrice}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Market Capitalisation</th>
+            <td>${{stock_result.marketCap}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Security Type</th>
+            <td>{{stock_result.quoteType}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Industry</th>
+            <td>{{stock_result.industry}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Closing Price</th>
+            <td>${{stock_result.close}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Volume</th>
+            <td>{{stock_result.volume}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Change in Price</th>
+            <td>${{stock_result.price_change}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Percent Change</th>
+            <td>{{stock_result.percent_change}}%</td>
+          </tr>
+
+          <tr>
+            <th scope="row">High</th>
+            <td>${{stock_result.high}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Low</th>
+            <td>${{stock_result.low}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+</div>
+</div>
+</div>
+
+
+{% endblock content %}
+
