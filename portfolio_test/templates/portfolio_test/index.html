@@ -8,16 +8,17 @@
 
 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 
- <script type="text/javascript">
+<script type="text/javascript">
 window.onload = function () {
 
-let data = []
-
 chart_data = {{chart_data}}
+
+data = []
 
 chart_data.forEach(el => {data.push({y:el})})
 
 console.log(data)
+
 
 var chart = new CanvasJS.Chart("chartContainer", {
 	theme: "light1", // "light2", "dark1", "dark2"
@@ -59,6 +60,7 @@ chart.render();
 </div>
 
 <div class="col-6">
+
 <table class="table">
         <tbody>
           <tr>

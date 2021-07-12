@@ -31,8 +31,8 @@ def show_stock(request):
 
     chart_data = []
 
-    for record in historical_record:        
-        chart_data.append(record.price_close)
+    for record in historical_record:            
+        chart_data.append(float(record.price_close))
 
     print(chart_data)
 
@@ -140,7 +140,7 @@ def populate_history(stock):
     period = 1 * 365
 
     # data = yf.download(stock.symbol, START, TODAY)
-    data = yf.download("AAPL", START, TODAY)
+    data = yf.download(stock.symbol, START, TODAY)
   
     start_date = date(2021, 1, 1)
     end_date = date(2021, 7, 12)
