@@ -16,6 +16,8 @@ django-filter = "^2.4.0"
 yfinance = "^0.1.63"
 django-chartjs = "^2.2.1"
 plotly = "^5.1.0"
+djangorestframework-simplejwt = "^4.7.2"
+django-cors-headers = "^3.7.0"
 
 [tool.poetry.dev-dependencies]
 

@@ -9,3 +9,6 @@ class User(AbstractUser):
         editable=False,
         default=uuid.uuid4
     )
+#     username = models.CharField(max_length=200, null=False, unique=True)
+#     password = models.CharField(max_length=200, null=False)
+#     email = models.CharField(max_length=200, null=False)
