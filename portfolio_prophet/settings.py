@@ -75,14 +75,27 @@ WSGI_APPLICATION = 'portfolio_prophet.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {  
+DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+#     'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'portfolio_prophet_devdb',
+#             'USER' : 'postgres', # postgres
+#             'PASSWORD' : 'postgres',
+#             'HOST' : 'localhost',
+#             'PORT' : 5433
+#         }
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'portfolio_prophet_devDB',
-        'USER': 'brianlim',
-        'HOST': 'localhost',
-        'PORT': 5432
-    }
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'portfolio_prophet_devdb',
+            'USER' : 'postgres', # postgres
+            'PASSWORD' : 'postgres',
+            'HOST' : 'localhost',
+            'PORT' : 5433
+        }
 }
 
 
