@@ -89,15 +89,32 @@ def show_stock(request):
 
 
 
-def get_history(symbol):
-    ticker = yf.Ticker(symbol).info
+def populate_stock(stock):
+
+
+    ticker = yf.Ticker(stock.symbol).info    
+
     print(ticker["shortName"])
- 
- 
+    # print(stock)
+
+
+    stock.name = ticker["shortName"]
+    stock.symbol = ticker["symbol"]
+    stock.industry = ticker["industry"]
+    stock.market_cap = round(ticker["marketCap"],2)
+    stock.current_price = round(ticker["currentPrice"],2)
+    stock.volume = round(ticker["volume"],2)
+    stock.prev_high = round(ticker["regularMarketDayHigh"],2)
+    stock.prev_low = round(ticker["regularMarketDayLow"],2)
+    stock.price_change = round((ticker["previousClose"] - ticker["currentPrice"]),2)
+    # stock.date_updated = date.today().strftime("%Y-%m-%d")
+
+    stock.save()
+  
 def populate_stock_history(request):
     stocks = Stock.objects.all()
     for stock in stocks:        
-        get_history(stock.symbol)
+        populate_stock(stock)
 
 
 

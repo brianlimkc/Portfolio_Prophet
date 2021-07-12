@@ -283,6 +283,18 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "plotly"
+version = "5.1.0"
+description = "An open-source, interactive data visualization library for Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+six = "*"
+tenacity = ">=6.2.0"
+
+[[package]]
 name = "prophet"
 version = "1.0.1"
 description = "Automatic Forecasting Procedure"
@@ -402,6 +414,17 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "tenacity"
+version = "8.0.0"
+description = "Retry code until it succeeds"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+doc = ["reno", "sphinx", "tornado (>=4.5)"]
+
+[[package]]
 name = "tqdm"
 version = "4.61.2"
 description = "Fast, Extensible Progress Meter"
@@ -456,7 +479,7 @@ requests = ">=2.20"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "98fcc7c1c6cf6aca70f128cff05e77259125b712b7460e6b87c1bda935695773"
+content-hash = "85e29a3fee964c48fd588338457a66b3affdb487aba57b2383d5ac0843bd2d17"
 
 [metadata.files]
 asgiref = [
@@ -800,6 +823,10 @@ pillow = [
     {file = "Pillow-8.3.1-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:1c03e24be975e2afe70dfc5da6f187eea0b49a68bb2b69db0f30a61b7031cee4"},
     {file = "Pillow-8.3.1.tar.gz", hash = "sha256:2cac53839bfc5cece8fdbe7f084d5e3ee61e1303cccc86511d351adcb9e2c792"},
 ]
+plotly = [
+    {file = "plotly-5.1.0-py2.py3-none-any.whl", hash = "sha256:d60412ee21d85102f67e5c7134d59feb5e42a5cbbfb1e580ad67cbdf7589d80c"},
+    {file = "plotly-5.1.0.tar.gz", hash = "sha256:71f6744acdc524c22236c226d7cf1072d1a58ebacaf749c640998298472c8c44"},
+]
 prophet = [
     {file = "prophet-1.0.1.tar.gz", hash = "sha256:3e682e8ea6e1ee26a92cf289f207d539f30e44879126c128ff8f4e360eb25a8b"},
 ]
@@ -886,6 +913,10 @@ six = [
 sqlparse = [
     {file = "sqlparse-0.4.1-py3-none-any.whl", hash = "sha256:017cde379adbd6a1f15a61873f43e8274179378e95ef3fede90b5aa64d304ed0"},
     {file = "sqlparse-0.4.1.tar.gz", hash = "sha256:0f91fd2e829c44362cbcfab3e9ae12e22badaa8a29ad5ff599f9ec109f0454e8"},
+]
+tenacity = [
+    {file = "tenacity-8.0.0-py3-none-any.whl", hash = "sha256:352cc77bb3dffb070111c83c548ef5afb78acf93f89a28d753c5570066411b57"},
+    {file = "tenacity-8.0.0.tar.gz", hash = "sha256:6011fc69be55e0e20a9ceccdd8a7d969e42f892a81ea3a007de56e764d3551dd"},
 ]
 tqdm = [
     {file = "tqdm-4.61.2-py2.py3-none-any.whl", hash = "sha256:5aa445ea0ad8b16d82b15ab342de6b195a722d75fc1ef9934a46bba6feafbc64"},
