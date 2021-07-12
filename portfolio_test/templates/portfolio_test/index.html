@@ -48,6 +48,14 @@ chart.render();
         <button class="btn btn-primary btn-sm mx-1" type="submit">Submit
         </button>
 </form>
+
+<form action="{% url 'populate_stock_history' %}" method="post">
+{% csrf_token %}
+        <button class="btn btn-primary btn-sm mx-1" type="submit">Get Stocks
+        </button>
+</form>
+
+
 </div>
 
 <div class="col-6">

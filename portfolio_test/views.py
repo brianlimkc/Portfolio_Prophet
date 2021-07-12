@@ -2,6 +2,7 @@ from django.shortcuts import render
 import yfinance as yf
 from prophet import Prophet
 from datetime import date
+from portfolio_test.models import *
 
 # Create your views here.
 def show_stock(request):
@@ -60,8 +61,7 @@ def show_stock(request):
     future = m.make_future_dataframe(periods=period)
     forecast = m.predict(future)
     forecast_length = forecast.shape[0]
-   
-    print(flat_chart_data)
+      
 
     forecast_results = {
         "30_days_yhat" : round(forecast["yhat"][forecast_length-335],2),
@@ -89,6 +89,19 @@ def show_stock(request):
 
 
 
+def get_history(symbol):
+    ticker = yf.Ticker(symbol).info
+    print(ticker["shortName"])
+ 
+ 
+def populate_stock_history(request):
+    stocks = Stock.objects.all()
+    for stock in stocks:        
+        get_history(stock.symbol)
+
+
+
+    
 
     
 
