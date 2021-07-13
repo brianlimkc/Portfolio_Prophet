@@ -7,14 +7,17 @@ from accounts.models import User
 from accounts.forms import RegisterUserForm
 # Create your views here.
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def register_user(request):
-    print(request.data)
     if request.method == "POST":
         form = RegisterUserForm(request.POST)
         print(form)
         if form.is_valid():
-            print("success")
             form.save()
+            return Response({"message" : "user is registered"}, status=status.HTTP_201_CREATED)
+    return Response({"message" : "user is not registered"}, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"message" : "user is registered"}, status=status.HTTP_201_CREATED)
+@api_view(['POST'])
+def login_user(request):
+
+    return Response({"message" : "user is logged in"}, status=status.HTTP_202_ACCEPTED)
