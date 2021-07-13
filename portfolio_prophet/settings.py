@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'portfolio_test',
+    'chartjs',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -74,12 +77,30 @@ WSGI_APPLICATION = 'portfolio_prophet.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+#     'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'portfolio_prophet_devdb',
+#             'USER' : 'postgres', # postgres
+#             'PASSWORD' : 'postgres',
+#             'HOST' : 'localhost',
+#             'PORT' : 5433
+#         }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'portfolio_prophet_devdb',
+            'USER' : 'postgres', # postgres
+            'PASSWORD' : 'postgres',
+            'HOST' : 'localhost',
+            'PORT' : 5433
+        }
 }
 
+
+AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
