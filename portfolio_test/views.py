@@ -9,7 +9,6 @@ def show_stock(request):
 
     stock = request.GET.get("stock")
 
-
     if stock==None:
         stock="GOOG"
         
@@ -21,11 +20,6 @@ def show_stock(request):
     stock_info = ticker.info
 
     period = 1 * 365
-
-
-    # data = yf.download(stock, START, TODAY)
-    # data.reset_index(inplace=True)
-    # print(data)
 
     stock_history = ticker.history(start=START, end=TODAY)  
     stock_history.reset_index(inplace=True)
@@ -88,15 +82,12 @@ def show_stock(request):
         )
 
 
-
 def populate_stock(stock):
-
 
     ticker = yf.Ticker(stock.symbol).info    
 
     print(ticker["shortName"])
     # print(stock)
-
 
     stock.name = ticker["shortName"]
     stock.symbol = ticker["symbol"]
