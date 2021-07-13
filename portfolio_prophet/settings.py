@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'portfolio_test',
-    'chartjs'
+    'chartjs',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -75,17 +81,31 @@ WSGI_APPLICATION = 'portfolio_prophet.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {  
+DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+#     'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'portfolio_prophet_devdb',
+#             'USER' : 'postgres', # postgres
+#             'PASSWORD' : 'postgres',
+#             'HOST' : 'localhost',
+#             'PORT' : 5433
+#         }
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'portfolio_prophet_devDB',
-        'USER': 'brianlim',
-        'HOST': 'localhost',
-        'PORT': 5432
-    }
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env('DB_NAME'),
+            'USER' : env('DB_USER'),
+            'PASSWORD' : env('DB_PASSWORD'),
+            'HOST' : env('DB_HOST'),
+            'PORT' : env('DB_PORT'),
+        }
 }
 
 
+AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
