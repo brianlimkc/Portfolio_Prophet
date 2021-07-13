@@ -540,7 +540,8 @@ requests = ">=2.20"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ff793dd40d1c7aee4bbf5adde0d231c2f0303a94702b2971e145028b8174d799"
+content-hash = "06cfd19f974cfdb7a90c4a0e7b4926c22853009f9474edecf1fdc8dcbf075611"
+
 
 [metadata.files]
 asgiref = [
