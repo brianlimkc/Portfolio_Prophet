@@ -48,6 +48,7 @@ def show_stock(request):
         "chart_data": chart_data,
         }
         )
+        
 
 def populate_stock(stock):
 
@@ -142,7 +143,6 @@ def recommendation(price,yhat,yhat_upper,yhat_lower):
         return "SELL"
     else:
         return "HOLD"
-
 
 
   
