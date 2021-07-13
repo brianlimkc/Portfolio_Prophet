@@ -11,13 +11,14 @@
 <script type="text/javascript">
 window.onload = function () {
 
-let data = []
-
 chart_data = {{chart_data}}
+
+data = []
 
 chart_data.forEach(el => {data.push({y:el})})
 
 console.log(data)
+
 
 var chart = new CanvasJS.Chart("chartContainer", {
 	theme: "light1", // "light2", "dark1", "dark2"
@@ -36,7 +37,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 chart.render();
 
 }
-</script>
+</script> 
 
 
 <div class="container">
@@ -59,6 +60,7 @@ chart.render();
 </div>
 
 <div class="col-6">
+
 <table class="table">
         <tbody>
           <tr>
@@ -77,18 +79,18 @@ chart.render();
             <th scope="row">Market Capitalisation</th>
             <td>${{stock_result.marketCap}}</td>
           </tr>
-          <tr>
+          {% comment %} <tr>
             <th scope="row">Security Type</th>
             <td>{{stock_result.quoteType}}</td>
-          </tr>
+          </tr> {% endcomment %}
           <tr>
             <th scope="row">Industry</th>
             <td>{{stock_result.industry}}</td>
           </tr>
-          <tr>
+          {% comment %} <tr>
             <th scope="row">Closing Price</th>
             <td>${{stock_result.close}}</td>
-          </tr>
+          </tr> {% endcomment %}
           <tr>
             <th scope="row">Volume</th>
             <td>{{stock_result.volume}}</td>
@@ -97,10 +99,10 @@ chart.render();
             <th scope="row">Change in Price</th>
             <td>${{stock_result.price_change}}</td>
           </tr>
-          <tr>
+          {% comment %} <tr>
             <th scope="row">Percent Change</th>
             <td>{{stock_result.percent_change}}%</td>
-          </tr>
+          </tr> {% endcomment %}
 
           <tr>
             <th scope="row">High</th>
@@ -119,7 +121,7 @@ chart.render();
 
     <div class="col-6">
 
-          <table class="table">
+          {% comment %} <table class="table">
       <thead>
       <tr>
       <th scope="col">Days</th>
@@ -152,7 +154,7 @@ chart.render();
         </tr>
       </tbody>
 
-      </table>
+      </table> {% endcomment %}
     </div>
 </div>
 </div>

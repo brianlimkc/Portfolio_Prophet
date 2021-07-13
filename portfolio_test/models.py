@@ -56,7 +56,7 @@ class Historical_Stock_Data(models.Model):
     stock_id = models.ForeignKey(
         Stock, 
         on_delete=models.CASCADE, 
-        related_name="stock_data_id")
+        related_name="stock_forecast_id")
 
     date_recorded = models.DateTimeField()
     price_open = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
@@ -66,3 +66,18 @@ class Historical_Stock_Data(models.Model):
     volume = models.DecimalField(default=0.00, decimal_places=2, max_digits=15)
 
 
+class Forecast_Record(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4
+    )
+    stock_id = models.ForeignKey(
+        Stock, 
+        on_delete=models.CASCADE, 
+        related_name="stock_data_id")
+    date = models.DateTimeField()
+    yhat = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
+    yhat_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
+    yhat_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
+    
