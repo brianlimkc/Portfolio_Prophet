@@ -21,30 +21,21 @@ class Stock(models.Model):
     percent_change = models.DecimalField(default=0.00, decimal_places=2, max_digits=15,null=True)
     date_added = models.DateTimeField(auto_now_add=True,null=True)
     date_updated = models.DateTimeField(null=True)
+    yhat_30 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
+    yhat_30_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
+    yhat_30_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
+    yhat_30_advice = models.CharField(max_length=20,default="")
+    yhat_180 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
+    yhat_180_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
+    yhat_180_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
+    yhat_180_advice = models.CharField(max_length=20,default="")
+    yhat_365 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
+    yhat_365_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
+    yhat_365_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
+    yhat_365_advice = models.CharField(max_length=20,default="")
 
     def __str__(self):
         return self.name
-
-
-# class Stocks_Tracked(models.Model):
-#     id = models.UUIDField(
-#         primary_key=True,
-#         editable=False,
-#         default=uuid.uuid4
-#     )    
-
-#     stock_id = models.ForeignKey(
-#         Stock, 
-#         on_delete=models.CASCADE, 
-#         related_name="stock_track_id")
-
-#     symbol = models.CharField(max_length=10)
-#     date_added = models.DateTimeField(auto_now_add=True)
-#     date_updated = models.DateTimeField()
-
-#     def __str__(self):
-#         return self.stock_id.name
-
 
 class Historical_Stock_Data(models.Model):
     id = models.UUIDField(

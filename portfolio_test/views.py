@@ -1,7 +1,6 @@
 from django.shortcuts import render
 import yfinance as yf
 from prophet import Prophet
-from datetime import date, timedelta
 import datetime
 from portfolio_test.models import *
 
@@ -13,7 +12,15 @@ def show_stock(request):
     if stock==None:
         stock="GOOG"
 
-    stock_record = Stock.objects.get(symbol=stock)
+    try: 
+        stock_record = Stock.objects.get(symbol=stock)
+    except Stock.DoesNotExist:
+        new_stock = Stock(
+            symbol = stock
+        )
+        populate_stock(new_stock)
+        populate_history(new_stock)
+        stock_record = new_stock
     
     stock_result = {
         "name" : stock_record.name,
@@ -33,9 +40,7 @@ def show_stock(request):
 
     for record in historical_record:            
         chart_data.append(float(record.price_close))
-
-    print(chart_data)
-
+   
     return render(
         request, 
         "portfolio_test/index.html", 
@@ -118,7 +123,6 @@ def populate_stock(stock):
     ticker = yf.Ticker(stock.symbol).info    
 
     print(ticker["shortName"])
-    # print(stock)
 
     stock.name = ticker["shortName"]
     stock.symbol = ticker["symbol"]
@@ -129,24 +133,19 @@ def populate_stock(stock):
     stock.prev_high = round(ticker["regularMarketDayHigh"],2)
     stock.prev_low = round(ticker["regularMarketDayLow"],2)
     stock.price_change = round((ticker["previousClose"] - ticker["currentPrice"]),2)
-    # stock.date_updated = date.today().strftime("%Y-%m-%d")
+    stock.percent_change = round(((ticker["previousClose"] - ticker["currentPrice"]) / ticker["currentPrice"]),2)
+    stock.date_updated = datetime.datetime.now().date()
     stock.save()
-
 
 def populate_history(stock):
 
-    START = "2021-01-01"
-    TODAY = date.today().strftime("%Y-%m-%d")
+    end_date = datetime.datetime.now().date()
+    start_date = end_date - datetime.timedelta(days=5*365)
+    delta = datetime.timedelta(days=1)
     period = 1 * 365
-
-    # data = yf.download(stock.symbol, START, TODAY)
-    data = yf.download(stock.symbol, START, TODAY)
+      
+    data = yf.download(stock.symbol, start_date, end_date)
   
-    start_date = date(2021, 1, 1)
-    end_date = date(2021, 7, 12)
-    delta = timedelta(days=1)
-    
-
     while start_date <= end_date:
         data_row = data[data.index==str(start_date)]                       
         close = data_row["Close"].values.tolist()
@@ -156,6 +155,7 @@ def populate_history(stock):
                 date_recorded = start_date,
                 price_close = close_price
             )
+            
             record.save()
 
         start_date += delta
@@ -186,15 +186,45 @@ def populate_history(stock):
             yhat_lower = yhat_lower[0]
         )
 
-        forecast_record.save()
-         
+        forecast_record.save()         
+
+    stock.yhat_30 = round(forecast["yhat"][forecast_length-335],2)
+    stock.yhat_30_upper = round(forecast["yhat_upper"][forecast_length-335],2)
+    stock.yhat_30_lower = round(forecast["yhat_lower"][forecast_length-335],2)
+    stock.yhat_30_advice = recommendation(stock.current_price,stock.yhat_30,stock.yhat_30_upper,stock.yhat_30_lower)
+    stock.yhat_180 = round(forecast["yhat"][forecast_length-185],2)
+    stock.yhat_180_upper = round(forecast["yhat_upper"][forecast_length-185],2)
+    stock.yhat_180_lower = round(forecast["yhat_lower"][forecast_length-185],2)
+    stock.yhat_180_advice = recommendation(stock.current_price,stock.yhat_30,stock.yhat_30_upper,stock.yhat_30_lower)
+    stock.yhat_365 = round(forecast["yhat"][forecast_length-1],2)
+    stock.yhat_365_upper = round(forecast["yhat_upper"][forecast_length-1],2)
+    stock.yhat_365_lower = round(forecast["yhat_lower"][forecast_length-1],2)
+    stock.yhat_365_advice = recommendation(stock.current_price,stock.yhat_30,stock.yhat_30_upper,stock.yhat_30_lower)
+    stock.save()
+
+
+    
+def recommendation(price,yhat,yhat_upper,yhat_lower):
+    if price < yhat_lower:
+        return "BUY"
+    elif price > yhat_upper:
+        return "SELL"
+    else:
+        return "HOLD"
+
+
+
   
 def populate_stock_history(request):
+
+    Historical_Stock_Data.objects.all().delete()
+    Forecast_Record.objects.all().delete()
+
     stocks = Stock.objects.all()
     for stock in stocks:        
-        # populate_stock(stock)
+        populate_stock(stock)
         populate_history(stock)
-    # populate_history(stock)
+    
 
 
 
