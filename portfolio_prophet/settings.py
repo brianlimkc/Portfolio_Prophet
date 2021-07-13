@@ -100,6 +100,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+]
+
 ROOT_URLCONF = 'portfolio_prophet.urls'
 
 TEMPLATES = [
