@@ -53,14 +53,17 @@ class Stock(models.Model):
         "yhat_30_upper" : float(self.yhat_30_upper),
         "yhat_30_lower" : float(self.yhat_30_lower),
         "yhat_30_advice" : self.yhat_30_advice,
+        "yhat_30_ratio" : float(round(((self.yhat_30 - self.current_price) / self.yhat_30),2)),
         "yhat_180" : float(self.yhat_180),
         "yhat_180_upper" : float(self.yhat_180_upper),
         "yhat_180_lower" : float(self.yhat_180_lower),
         "yhat_180_advice" : self.yhat_180_advice,
+        "yhat_180_ratio" : float(round(((self.yhat_180 - self.current_price) / self.yhat_180),2)),
         "yhat_365" : float(self.yhat_365),
         "yhat_365_upper" : float(self.yhat_365_upper),
         "yhat_365_lower" : float(self.yhat_365_lower),
         "yhat_365_advice" : self.yhat_365_advice,
+        "yhat_365_ratio" : float(round(((self.yhat_365 - self.current_price) / self.yhat_365),2)),
         }
 
 class Historical_Stock_Data(models.Model):
@@ -84,7 +87,7 @@ class Historical_Stock_Data(models.Model):
 
     def serialize(self):
         return {
-            "date" : self.date_recorded,
+            "date" : self.date_recorded.date(),
             "price" : self.price_close,
         }
 
@@ -107,7 +110,7 @@ class Forecast_Record(models.Model):
     
     def serialize(self):
         return {
-        "date" : self.date,
+        "date" : self.date.date(),
         "yhat" : self.yhat,
         "yhat_upper" : self.yhat_upper,
         "yhat_lower" : self.yhat_lower

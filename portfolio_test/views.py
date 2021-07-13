@@ -28,7 +28,7 @@ def show_stock(request):
     historical_record = Historical_Stock_Data.objects.filter(stock_id = stock_record.id)
     historical_record_all = [r.serialize() for r in historical_record]
     forecast_record = Forecast_Record.objects.filter(stock_id = stock_record.id)
-    forecast_record_all = [r.serialize() for r in forecast_record]
+    forecast_record_all = [r.serialize() for r in forecast_record]        
 
     # stock_record = Stock.objects.get(symbol=stock)
     # historical_record = Historical_Stock_Data.objects.filter(stock_id = stock_record.id)
