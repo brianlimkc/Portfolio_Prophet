@@ -25,13 +25,26 @@ def show_stock(request):
     stock_result = {
         "name" : stock_record.name,
         "symbol" : stock_record.symbol,
-        "currentPrice" : stock_record.current_price,
         "industry" : stock_record.industry,
-        "marketCap" : stock_record.market_cap,
-        "high" : stock_record.prev_high,
-        "low" : stock_record.prev_low,
-        "volume" : stock_record.volume,
-        "price_change" : stock_record.price_change
+        "marketCap" : float(stock_record.market_cap),
+        "currentPrice" : float(stock_record.current_price),
+        "volume" : float(stock_record.volume),        
+        "high" : float(stock_record.prev_high),
+        "low" : float(stock_record.prev_low),
+        "price_change" : float(stock_record.price_change),
+        "percent_change" : float(stock_record.percent_change),
+        "yhat_30" : float(stock_record.yhat_30),
+        "yhat_30_upper" : float(stock_record.yhat_30_upper),
+        "yhat_30_lower" : float(stock_record.yhat_30_lower),
+        "yhat_30_advice" : stock_record.yhat_30_advice,
+        "yhat_180" : float(stock_record.yhat_180),
+        "yhat_180_upper" : float(stock_record.yhat_180_upper),
+        "yhat_180_lower" : float(stock_record.yhat_180_lower),
+        "yhat_180_advice" : stock_record.yhat_180_advice,
+        "yhat_365" : float(stock_record.yhat_365),
+        "yhat_365_upper" : float(stock_record.yhat_365_upper),
+        "yhat_365_lower" : float(stock_record.yhat_365_lower),
+        "yhat_365_advice" : stock_record.yhat_365_advice,
     }  
 
     historical_record = Historical_Stock_Data.objects.filter(stock_id = stock_record.id)
@@ -39,13 +52,35 @@ def show_stock(request):
     chart_data = []
 
     for record in historical_record:            
-        chart_data.append(float(record.price_close))
+        chart_data.append({ 
+            "date" : str(record.date_recorded),
+            "price" : float(record.price_close)
+            })
    
+
+    forecast_record = Forecast_Record.objects.filter(stock_id = stock_record.id)
+
+    forecast_data = []
+
+    for record in forecast_record:            
+        forecast_data.append({ 
+            "date" : str(record.date),
+            "yhat" : float(record.yhat),
+            "yhat_upper" : float(record.yhat_upper),
+            "yhat_lower" : float(record.yhat_lower),
+            })
+
+    print(stock_result)
+    print(chart_data[-1])
+    print(forecast_data[-1])
+
     return render(
         request, 
         "portfolio_test/index.html", 
-        {"stock_result":stock_result,
-        "chart_data": chart_data,
+        {
+            "stock_result":stock_result,
+            "chart_data": chart_data,
+            "forecast_data" : forecast_data
         }
         )
         
