@@ -18,6 +18,7 @@ django-chartjs = "^2.2.1"
 plotly = "^5.1.0"
 djangorestframework-simplejwt = "^4.7.2"
 django-cors-headers = "^3.7.0"
+django-environ = "^0.4.5"
 
 [tool.poetry.dev-dependencies]
 
