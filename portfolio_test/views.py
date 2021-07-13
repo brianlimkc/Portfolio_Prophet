@@ -197,20 +197,20 @@ def populate_history(stock):
     stock.yhat_30 = round(forecast["yhat"][forecast_length-335],2)
     stock.yhat_30_upper = round(forecast["yhat_upper"][forecast_length-335],2)
     stock.yhat_30_lower = round(forecast["yhat_lower"][forecast_length-335],2)
-    stock.yhat_30_advice = recommendation(stock.current_price,stock.yhat_30,stock.yhat_30_upper,stock.yhat_30_lower)
+    stock.yhat_30_advice = recommendation(stock.current_price,stock.yhat_30_upper,stock.yhat_30_lower)
     stock.yhat_180 = round(forecast["yhat"][forecast_length-185],2)
     stock.yhat_180_upper = round(forecast["yhat_upper"][forecast_length-185],2)
     stock.yhat_180_lower = round(forecast["yhat_lower"][forecast_length-185],2)
-    stock.yhat_180_advice = recommendation(stock.current_price,stock.yhat_30,stock.yhat_30_upper,stock.yhat_30_lower)
+    stock.yhat_180_advice = recommendation(stock.current_price,stock.yhat_180_upper,stock.yhat_180_lower)
     stock.yhat_365 = round(forecast["yhat"][forecast_length-1],2)
     stock.yhat_365_upper = round(forecast["yhat_upper"][forecast_length-1],2)
     stock.yhat_365_lower = round(forecast["yhat_lower"][forecast_length-1],2)
-    stock.yhat_365_advice = recommendation(stock.current_price,stock.yhat_30,stock.yhat_30_upper,stock.yhat_30_lower)
+    stock.yhat_365_advice = recommendation(stock.current_price,stock.yhat_365_upper,stock.yhat_365_lower)
     stock.save()
 
 
     
-def recommendation(price,yhat,yhat_upper,yhat_lower):
+def recommendation(price,yhat_upper,yhat_lower):
     if price < yhat_lower:
         return "BUY"
     elif price > yhat_upper:

@@ -19,6 +19,7 @@ plotly = "^5.1.0"
 djangorestframework-simplejwt = "^4.7.2"
 django-cors-headers = "^3.7.0"
 django-environ = "^0.4.5"
+dj-database-url = "^0.5.0"
 
 [tool.poetry.dev-dependencies]
 

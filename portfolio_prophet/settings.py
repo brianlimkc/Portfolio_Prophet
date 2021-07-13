@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import environ
+import os
+import dj_database_url
 
 # Initialise environment variables
 env = environ.Env()
@@ -104,6 +106,9 @@ DATABASES = {
         }
 }
 
+DATABASES['default'] = dj_database_url.parse(env('DB_URL'))
+
+
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -137,7 +142,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -149,5 +154,3 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-USE_TZ = False
