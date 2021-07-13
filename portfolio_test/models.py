@@ -37,6 +37,32 @@ class Stock(models.Model):
     def __str__(self):
         return self.name
 
+    def serialize(self):
+        return {
+        "name" : self.name,
+        "symbol" : self.symbol,
+        "industry" : self.industry,
+        "marketCap" : float(self.market_cap),
+        "currentPrice" : float(self.current_price),
+        "volume" : float(self.volume),        
+        "high" : float(self.prev_high),
+        "low" : float(self.prev_low),
+        "price_change" : float(self.price_change),
+        "percent_change" : float(self.percent_change),
+        "yhat_30" : float(self.yhat_30),
+        "yhat_30_upper" : float(self.yhat_30_upper),
+        "yhat_30_lower" : float(self.yhat_30_lower),
+        "yhat_30_advice" : self.yhat_30_advice,
+        "yhat_180" : float(self.yhat_180),
+        "yhat_180_upper" : float(self.yhat_180_upper),
+        "yhat_180_lower" : float(self.yhat_180_lower),
+        "yhat_180_advice" : self.yhat_180_advice,
+        "yhat_365" : float(self.yhat_365),
+        "yhat_365_upper" : float(self.yhat_365_upper),
+        "yhat_365_lower" : float(self.yhat_365_lower),
+        "yhat_365_advice" : self.yhat_365_advice,
+        }
+
 class Historical_Stock_Data(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -56,6 +82,13 @@ class Historical_Stock_Data(models.Model):
     price_low = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     volume = models.DecimalField(default=0.00, decimal_places=2, max_digits=15)
 
+    def serialize(self):
+        return {
+            "date" : self.date_recorded,
+            "price" : self.price_close,
+        }
+
+
 
 class Forecast_Record(models.Model):
     id = models.UUIDField(
@@ -72,3 +105,10 @@ class Forecast_Record(models.Model):
     yhat_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     yhat_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     
+    def serialize(self):
+        return {
+        "date" : self.date,
+        "yhat" : self.yhat,
+        "yhat_upper" : self.yhat_upper,
+        "yhat_lower" : self.yhat_lower
+        }
