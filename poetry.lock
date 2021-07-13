@@ -120,6 +120,17 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "django-common-helpers"
+version = "0.9.2"
+description = "Common things every Django app needs!"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Django = ">=1.8.0"
+
+[[package]]
 name = "django-cors-headers"
 version = "3.7.0"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -129,6 +140,18 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 Django = ">=2.2"
+
+[[package]]
+name = "django-cron"
+version = "0.5.1"
+description = "Running python crons in a Django project"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Django = ">=1.8.0"
+django-common-helpers = ">=0.6.4"
 
 [[package]]
 name = "django-environ"
@@ -540,8 +563,7 @@ requests = ">=2.20"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "06cfd19f974cfdb7a90c4a0e7b4926c22853009f9474edecf1fdc8dcbf075611"
-
+content-hash = "823a48f40dfc0d2c5acf76c02028832e65b8b16fc056ee0dd0b7bdacc0afb5db"
 
 [metadata.files]
 asgiref = [
@@ -621,9 +643,15 @@ django-chartjs = [
     {file = "django-chartjs-2.2.1.tar.gz", hash = "sha256:f7af4107f0d34057d1b8cc63ec16e8edc1bb7be23663c7a614296492d4f396b2"},
     {file = "django_chartjs-2.2.1-py3-none-any.whl", hash = "sha256:b434c4784c6af216a97b9f25f821bd08f6db70996a0ddc0e51cbcfb4b3937693"},
 ]
+django-common-helpers = [
+    {file = "django-common-helpers-0.9.2.tar.gz", hash = "sha256:2d56be6fa261d829a6a224f189bf276267b9082a17d613fe5f015dd4d65c17b4"},
+]
 django-cors-headers = [
     {file = "django-cors-headers-3.7.0.tar.gz", hash = "sha256:96069c4aaacace786a34ee7894ff680780ec2644e4268b31181044410fecd12e"},
     {file = "django_cors_headers-3.7.0-py3-none-any.whl", hash = "sha256:1ac2b1213de75a251e2ba04448da15f99bcfcbe164288ae6b5ff929dc49b372f"},
+]
+django-cron = [
+    {file = "django-cron-0.5.1.tar.gz", hash = "sha256:08d22708c8b2ecab8cda989019a66c7e1e2424c59d822796fd45abf7731d261d"},
 ]
 django-environ = [
     {file = "django-environ-0.4.5.tar.gz", hash = "sha256:6c9d87660142608f63ec7d5ce5564c49b603ea8ff25da595fd6098f6dc82afde"},

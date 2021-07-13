@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'chartjs',
     'accounts',
     'corsheaders',
+    "django_cron",
 ]
 
 REST_FRAMEWORK = {
@@ -117,7 +118,7 @@ DATABASES = {
         }
 }
 
-DATABASES['default'] = dj_database_url.parse(env('DB_URL'))
+# DATABASES['default'] = dj_database_url.parse(env('DB_URL'))
 
 
 
@@ -165,3 +166,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRON_CLASSES = [
+    'portfolio_test.cron.MyCronJob',
+]

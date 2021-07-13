@@ -24,15 +24,15 @@ class Stock(models.Model):
     yhat_30 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_30_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_30_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
-    yhat_30_advice = models.CharField(max_length=20,default="")
+    yhat_30_advice = models.CharField(max_length=20,default="",null=True)
     yhat_180 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_180_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_180_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
-    yhat_180_advice = models.CharField(max_length=20,default="")
+    yhat_180_advice = models.CharField(max_length=20,default="",null=True)
     yhat_365 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_365_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_365_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
-    yhat_365_advice = models.CharField(max_length=20,default="")
+    yhat_365_advice = models.CharField(max_length=20,default="",null=True)
 
     def __str__(self):
         return self.name
@@ -90,8 +90,6 @@ class Historical_Stock_Data(models.Model):
             "date" : self.date_recorded.date(),
             "price" : self.price_close,
         }
-
-
 
 class Forecast_Record(models.Model):
     id = models.UUIDField(

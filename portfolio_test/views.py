@@ -6,6 +6,8 @@ from portfolio_test.models import *
 from django.http.response import JsonResponse
 from portfolio_test.serializers import *
 
+
+
 # Create your views here.
 def show_stock(request):
 
@@ -153,6 +155,7 @@ def populate_stock_history(request):
     
 
 
+        
 
     
 
