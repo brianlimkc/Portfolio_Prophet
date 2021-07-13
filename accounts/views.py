@@ -1,19 +1,20 @@
 from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from django.http.response import JsonResponse
+from rest_framework.decorators import api_view
 from accounts.serializers import UserSerializer
 from accounts.models import User
+from accounts.forms import RegisterUserForm
 # Create your views here.
 
 @api_view(['GET', 'POST'])
 def register_user(request):
+    print(request.data)
     if request.method == "POST":
-        new_user = UserSerializer(data=request.data)
-        print(request.data)
-        if new_user.is_valid():
+        form = RegisterUserForm(request.POST)
+        print(form)
+        if form.is_valid():
             print("success")
-            new_user.save()
+            form.save()
 
-    return Response({"message" : ""}, status=status.HTTP_201_CREATED)
+    return Response({"message" : "user is registered"}, status=status.HTTP_201_CREATED)
