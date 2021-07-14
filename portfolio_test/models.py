@@ -24,15 +24,15 @@ class Stock(models.Model):
     yhat_30 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_30_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_30_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
-    yhat_30_advice = models.CharField(max_length=20,default="")
+    yhat_30_advice = models.CharField(max_length=20,default="",null=True)
     yhat_180 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_180_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_180_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
-    yhat_180_advice = models.CharField(max_length=20,default="")
+    yhat_180_advice = models.CharField(max_length=20,default="",null=True)
     yhat_365 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_365_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
     yhat_365_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9,null=True)
-    yhat_365_advice = models.CharField(max_length=20,default="")
+    yhat_365_advice = models.CharField(max_length=20,default="",null=True)
 
     def __str__(self):
         return self.name
@@ -53,14 +53,17 @@ class Stock(models.Model):
         "yhat_30_upper" : float(self.yhat_30_upper),
         "yhat_30_lower" : float(self.yhat_30_lower),
         "yhat_30_advice" : self.yhat_30_advice,
+        "yhat_30_ratio" : float(round(((self.yhat_30 - self.current_price) / self.yhat_30),2)),
         "yhat_180" : float(self.yhat_180),
         "yhat_180_upper" : float(self.yhat_180_upper),
         "yhat_180_lower" : float(self.yhat_180_lower),
         "yhat_180_advice" : self.yhat_180_advice,
+        "yhat_180_ratio" : float(round(((self.yhat_180 - self.current_price) / self.yhat_180),2)),
         "yhat_365" : float(self.yhat_365),
         "yhat_365_upper" : float(self.yhat_365_upper),
         "yhat_365_lower" : float(self.yhat_365_lower),
         "yhat_365_advice" : self.yhat_365_advice,
+        "yhat_365_ratio" : float(round(((self.yhat_365 - self.current_price) / self.yhat_365),2)),
         }
 
 class Historical_Stock_Data(models.Model):
@@ -84,11 +87,9 @@ class Historical_Stock_Data(models.Model):
 
     def serialize(self):
         return {
-            "date" : self.date_recorded,
+            "date" : self.date_recorded.date(),
             "price" : self.price_close,
         }
-
-
 
 class Forecast_Record(models.Model):
     id = models.UUIDField(
@@ -104,11 +105,13 @@ class Forecast_Record(models.Model):
     yhat = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     yhat_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     yhat_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
+    price = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     
     def serialize(self):
         return {
-        "date" : self.date,
+        "date" : self.date.date(),
         "yhat" : self.yhat,
         "yhat_upper" : self.yhat_upper,
-        "yhat_lower" : self.yhat_lower
+        "yhat_lower" : self.yhat_lower,
+        "price" : self.price,
         }
