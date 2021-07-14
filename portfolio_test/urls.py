@@ -6,4 +6,6 @@ urlpatterns = [
     path('show_all', show_all, name="show_all"),
     path('get_stocks', populate_stock_history, name='populate_stock_history'),
     path('populate', populate_stocksdb, name="populate_stocksdb"),
+    path('portfolio', portfolio, name="portfolio"),
+    path('watchlist', watchlist, name="watchlist"),
 ]

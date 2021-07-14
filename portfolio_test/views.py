@@ -8,7 +8,8 @@ from django.http.response import JsonResponse
 from portfolio_test.serializers import *
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from rest_framework.response import Response
+from rest_framework import status
 
 # Create your views here.
 def show_stock(request):
@@ -38,7 +39,6 @@ def show_stock(request):
         "historical_record" : historical_record_all,
         "forecast_record" : forecast_record_all
         })
-
 
         
 def show_all(request):
@@ -77,21 +77,7 @@ def populate_history(stock):
     period = 1 * 365
       
     data = yf.download(stock.symbol, start_date, end_date)
-  
-    # while start_date <= end_date:
-    #     data_row = data[data.index==str(start_date)]                       
-    #     close = data_row["Close"].values.tolist()
-    #     for close_price in close:  
-    #         record = Historical_Stock_Data(
-    #             stock_id = stock,
-    #             date_recorded = start_date,
-    #             price_close = close_price
-    #         )
-            
-    #         record.save()
-
-    #     start_date += delta
-
+ 
     data.reset_index(inplace=True)  
     df_train = data[['Date','Close']]    
 
@@ -145,7 +131,6 @@ def populate_history(stock):
     stock.yhat_365_advice = recommendation(stock.current_price,stock.yhat_365_upper,stock.yhat_365_lower)
     stock.save()
 
-
     
 def recommendation(price,yhat_upper,yhat_lower):
     if price < yhat_lower:
@@ -165,43 +150,46 @@ def populate_stock_history(request):
     for stock in stocks:        
         populate_stock(stock)
         populate_history(stock)
+
+    return Response({"message" : "Stock info fetched and populated"}, status=status.HTTP_200_OK)
+
     
 def populate_stocksdb(requests):
     symbols = [
-        "AAPL",
-        "ADBE",
-        "ADI",
-        # "ADP",
-        # "ADSK",
-        # "AEP",
-        # "ALGN",
-        # "ALXN",
-        # "AMAT",
-        # "AMD",
-        # # "AMGN",
-        # "AMZN",
-        # "ANSS",
-        # "ASML",
-        # "ATVI",
-        # "AVGO",
-        # "BIDU",
-        # "BIIB",
-        # "BKNG",
-        # "CDNS",
-        # "CDW",
-        # "CERN",
-        # "CHKP",
-        # "CHTR",
-        # "CMCSA",
-        # "COST",
-        # "CPRT",
-        # "CSCO",
-        # "CSX",
-        # "CTAS",
-        # "CTSH",
-        # "DLTR",
-        # "DOCU",
-        # "DXCM",
+        # "AAPL",
+        # "ADBE",
+        # "ADI",
+        "ADP",
+        "ADSK",
+        "AEP",
+        "ALGN",
+        "ALXN",
+        "AMAT",
+        "AMD",
+        "AMGN",
+        "AMZN",
+        "ANSS",
+        "ASML",
+        "ATVI",
+        "AVGO",
+        "BIDU",
+        "BIIB",
+        "BKNG",
+        "CDNS",
+        "CDW",
+        "CERN",
+        "CHKP",
+        "CHTR",
+        "CMCSA",
+        "COST",
+        "CPRT",
+        "CSCO",
+        "CSX",
+        "CTAS",
+        "CTSH",
+        "DLTR",
+        "DOCU",
+        "DXCM",
         # "EA",
         # "EBAY",
         # "EXC",
@@ -278,14 +266,13 @@ def populate_stocksdb(requests):
         )
         stock.save()
 
+    return Response({"message" : "Stocks inserted into DB"}, status=status.HTTP_200_OK)
+
+
 @permission_classes([IsAuthenticated])
 def watchlist(request):
 
-    print("inside watchlist")
-
     user_id = request.user.id
-
-    print(user_id)
 
     if request.method == "POST":
         stock_id = request.POST.get("id")
@@ -293,12 +280,51 @@ def watchlist(request):
             user_id = user_id,
             stock_id = stock_id
         )
-    watchlist_record.save()
+        watchlist_record.save()
+        return Response({"message" : "Stock saved into user watchlist"}, status=status.HTTP_201_CREATED)
 
-    if request.method == "PUT":
+
+    if request.method == "DELETE":
         stock_id = request.PUT.get("id")
         watchlist_record = Watchlist.objects.get(user_id=user_id, stock_id=stock_id)
         watchlist_record.delete()
+        return Response({"message" : "Stock deleted from user watchlist"}, status=status.HTTP_200_OK)
 
+    if request.method == "GET":
+        watchlist = Watchlist.objects.filter(user_id=user_id)
+        watchlist_all = [w.serialize() for w in watchlist]
+        watchlist_stocks = [Stock.objects.get(id = w.stock_id).serialize() for w in watchlist_all]
 
-    
+        return JsonResponse({"watchlist_stocks" : watchlist_stocks})
+
+@permission_classes([IsAuthenticated])
+def portfolio(request):
+
+    user_id = request.user.id
+
+    if request.method == "POST":
+        stock_id = request.POST.get("id")
+        portfolio_record = Portfolio(
+            user_id = user_id,
+            stock_id = stock_id,
+            quantity = request.POST['quantity'],
+            price = request.POST['price'],
+            date = request.POST['date'],
+        )
+        portfolio_record.save()
+        return Response({"message" : "Stock saved into user portfolio"}, status=status.HTTP_201_CREATED)
+
+    if request.method == "DELETE":
+        stock_id = request.PUT.get("id")
+        portfolio_records = Portfolio.objects.filter(user_id=user_id, stock_id=stock_id)
+        for p in portfolio_records:
+            p.delete()             
+        return Response({"message" : "Stock(s) deleted from user portfolio"}, status=status.HTTP_200_OK)
+
+    if request.method == "GET":
+        portfolio = Portfolio.objects.filter(user_id=user_id)
+        portfolio_all = [p.serialize() for p in portfolio]
+        portfolio_stock_ids = [w.stock_id for w in watchlist]
+        portfolio_stock_ids = list(dict.fromkeys(portfolio_stock_ids))
+        portfolio_all = [Stock.objects.get(id = id).serialize() for id in portfolio_stock_ids]
+        return JsonResponse({"portfolio_list": portfolio_all})
