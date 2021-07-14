@@ -76,19 +76,19 @@ def populate_history(stock):
       
     data = yf.download(stock.symbol, start_date, end_date)
   
-    while start_date <= end_date:
-        data_row = data[data.index==str(start_date)]                       
-        close = data_row["Close"].values.tolist()
-        for close_price in close:  
-            record = Historical_Stock_Data(
-                stock_id = stock,
-                date_recorded = start_date,
-                price_close = close_price
-            )
+    # while start_date <= end_date:
+    #     data_row = data[data.index==str(start_date)]                       
+    #     close = data_row["Close"].values.tolist()
+    #     for close_price in close:  
+    #         record = Historical_Stock_Data(
+    #             stock_id = stock,
+    #             date_recorded = start_date,
+    #             price_close = close_price
+    #         )
             
-            record.save()
+    #         record.save()
 
-        start_date += delta
+    #     start_date += delta
 
     data.reset_index(inplace=True)  
     df_train = data[['Date','Close']]    
@@ -108,12 +108,23 @@ def populate_history(stock):
         yhat_upper = data_row["yhat_upper"].values.tolist()
         yhat_lower = data_row["yhat_lower"].values.tolist()
 
+        date = datetime.datetime.fromtimestamp(fdate[0]/1000000000)
+        data_row = data[data.index==index]["Close"]                                    
+
+        try: 
+            priceR = float(data_row)
+        except:
+            priceR = 0
+
+        print(priceR)
+
         forecast_record = Forecast_Record(
             stock_id = stock,
-            date = datetime.datetime.fromtimestamp(fdate[0]/1000000000),    
+            date = date,                
             yhat = yhat[0],
             yhat_upper = yhat_upper[0],
-            yhat_lower = yhat_lower[0]
+            yhat_lower = yhat_lower[0],
+            price = priceR,
         )
 
         forecast_record.save()         

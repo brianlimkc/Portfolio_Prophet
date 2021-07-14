@@ -105,11 +105,13 @@ class Forecast_Record(models.Model):
     yhat = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     yhat_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     yhat_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
+    price = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     
     def serialize(self):
         return {
         "date" : self.date.date(),
         "yhat" : self.yhat,
         "yhat_upper" : self.yhat_upper,
-        "yhat_lower" : self.yhat_lower
+        "yhat_lower" : self.yhat_lower,
+        "price" : self.price,
         }
