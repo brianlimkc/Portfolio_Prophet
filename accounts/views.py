@@ -9,13 +9,20 @@ from accounts.forms import RegisterUserForm
 # Create your views here.
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register_user(request):
     if request.method == "POST":
-        form = RegisterUserForm(request.POST)
-        print(form)
+        print(request.data)
+        print(request.POST)
+        form = RegisterUserForm(request.data)
+
         if form.is_valid():
             form.save()
             return Response({"message" : "user is registered"}, status=status.HTTP_201_CREATED)
+        else:
+            print(form.errors)
+            return Response({"message" : "check input for user"}, status=status.HTTP_400_BAD_REQUEST)
+#     return Response({"message" : "user is registered"}, status=status.HTTP_201_CREATED)
     return Response({"message" : "user is not registered"}, status=status.HTTP_400_BAD_REQUEST)
 
 
