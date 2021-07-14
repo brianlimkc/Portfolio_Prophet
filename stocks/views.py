@@ -2,10 +2,10 @@ from django.shortcuts import render
 import yfinance as yf
 from prophet import Prophet
 import datetime
-from portfolio_test.models import *
+from stocks.models import *
 from accounts.models import *
 from django.http.response import JsonResponse
-from portfolio_test.serializers import *
+from stocks.serializers import *
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response

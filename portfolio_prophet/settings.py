@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     "django_cron",
     'rest_framework',
     'rest_framework_simplejwt',
-
+    'django_rename_app',
+    'stocks',
 ]
 
 REST_FRAMEWORK = {
