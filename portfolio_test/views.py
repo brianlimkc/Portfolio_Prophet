@@ -3,9 +3,11 @@ import yfinance as yf
 from prophet import Prophet
 import datetime
 from portfolio_test.models import *
+from accounts.models import *
 from django.http.response import JsonResponse
 from portfolio_test.serializers import *
-
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
 # Create your views here.
@@ -276,7 +278,27 @@ def populate_stocksdb(requests):
         )
         stock.save()
 
+@permission_classes([IsAuthenticated])
+def watchlist(request):
+
+    print("inside watchlist")
+
+    user_id = request.user.id
+
+    print(user_id)
+
+    if request.method == "POST":
+        stock_id = request.POST.get("id")
+        watchlist_record = Watchlist(
+            user_id = user_id,
+            stock_id = stock_id
+        )
+    watchlist_record.save()
+
+    if request.method == "PUT":
+        stock_id = request.PUT.get("id")
+        watchlist_record = Watchlist.objects.get(user_id=user_id, stock_id=stock_id)
+        watchlist_record.delete()
+
+
     
-
-
-
