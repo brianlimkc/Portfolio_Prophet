@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-ppog60%(=r5oc5oo9t18z*=a70l%1em(27_nm9(%iwc!t2_88=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -50,13 +50,16 @@ INSTALLED_APPS = [
     'accounts',
     'corsheaders',
     "django_cron",
+    'rest_framework',
+    'rest_framework_simplejwt',
+
 ]
 
 REST_FRAMEWORK = {
 
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
             'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ]
 
 }
 
@@ -141,7 +144,7 @@ DATABASES = {
         }
 }
 
-# DATABASES['default'] = dj_database_url.parse(env('DB_URL'))
+DATABASES['default'] = dj_database_url.parse(env('DB_URL'))
 
 
 
