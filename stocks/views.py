@@ -293,17 +293,10 @@ def watchlist(request):
             watchlist_record.save()
         return Response({"message" : "Stock saved into user watchlist"}, status=status.HTTP_201_CREATED)
 
+
     if request.method == "GET":
         watchlist = Watchlist.objects.filter(user_id=user_id)
-#         watchlist_all = [w.serialize() for w in watchlist]
-        watchlist_all = []
-        for w in watchlist:
-            watchlist_all.append(w.serialize())
-        print(watchlist_all)
-#         watchlist_stocks = [Stock.objects.get(id = w.stock_id).serialize() for w in watchlist_all]
         watchlist_stocks = []
-        for w in watchlist_all:
-            watchlist_stock = Stock.objects.get(pk=w["stock_id"].id).serialize()
         for w in watchlist:
             watchlist_record = w.serialize()
             watchlist_stock = Stock.objects.get(pk=watchlist_record["stock_id"].id).serialize()
