@@ -351,26 +351,27 @@ def portfolio(request):
         portfolio = Portfolio.objects.filter(user_id=user_id)
         portfolio_stocks = []
         portfolio_records = []
-        portfolio_combi_records = []
-        for p in portfolio:
-            portfolio_record = p.serialize()
-            portfolio_records.append(portfolio_record)
-            portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
-            portfolio_stocks.append(portfolio_stock)
-            portfolio_combi_record = {
-                "name" : portfolio_stock["name"],
-                "symbol" : portfolio_stock["symbol"],
-                "mkt_price" : portfolio_stock["current_price"],
-                "purchase_price" : portfolio_record["price"],
-                "quantity" : portfolio_record["quantity"],
-                "date" : portfolio_record["date"],
-            }
-            portfolio_combi_records.append(portfolio_combi_record)
+        # portfolio_combi_records = []
+        # for p in portfolio:
+        #     portfolio_record = p.serialize()
+        #     portfolio_records.append(portfolio_record)
+        #     portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
+        #     portfolio_stocks.append(portfolio_stock)
+        #     portfolio_combi_record = {
+        #         "name" : portfolio_stock["name"],
+        #         "symbol" : portfolio_stock["symbol"],
+        #         "mkt_price" : portfolio_stock["currentPrice"],
+        #         "purchase_price" : portfolio_record["price"],
+        #         "quantity" : portfolio_record["quantity"],
+        #         "date" : portfolio_record["date"],
+        #     }
+        #     portfolio_combi_records.append(portfolio_combi_record)
 
         return JsonResponse({
             "portfolio_stocks" : portfolio_stocks, 
             "portfolio_records" : portfolio_records,
-            "portfolio_combi_records" : portfolio_combi_records,})
+            # "portfolio_combi_records" : portfolio_combi_records,
+            })
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
