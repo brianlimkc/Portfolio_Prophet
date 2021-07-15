@@ -270,7 +270,7 @@ def populate_stocksdb(requests):
 
 
 
-@api_view(['GET','POST','DELETE'])
+@api_view(['GET','POST'])
 @permission_classes([IsAuthenticated])
 def watchlist(request):
     user_id = request.user.id
@@ -290,11 +290,7 @@ def watchlist(request):
         )
         watchlist_record.save()
         return Response({"message" : "Stock saved into user watchlist"}, status=status.HTTP_201_CREATED)
-    if request.method == "DELETE":
-        stock_id = request.DELETE.get("id")
-        watchlist_record = Watchlist.objects.get(user_id=user_id, stock_id=stock_id)
-        watchlist_record.delete()
-        return Response({"message" : "Stock deleted from user watchlist"}, status=status.HTTP_200_OK)
+
     if request.method == "GET":
         watchlist = Watchlist.objects.filter(user_id=user_id)
 #         watchlist_all = [w.serialize() for w in watchlist]
@@ -309,6 +305,23 @@ def watchlist(request):
             watchlist_stocks.append(watchlist_stock)
         return JsonResponse({"watchlist_stocks" : watchlist_stocks})
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def watchlist_delete(request):
+    user_id = request.user.id
+    if request.method == "POST":
+        stock_id = request.data["id"]
+        try:
+            user = User.objects.get(pk=user_id)
+        except:
+            print("user not found")
+        try:
+            watchlist = Watchlist.objects.filter(user_id=user_id, stock_id=stock_id)
+        except:
+            print("stock not found")
+        for w in watchlist:
+            w.delete()
+        return Response({"message" : "Stock deleted from user watchlist"}, status=status.HTTP_200_OK)
 
 @api_view(['GET','POST','DELETE'])
 @permission_classes([IsAuthenticated])
@@ -336,13 +349,6 @@ def portfolio(request):
         portfolio_record.save()
         return Response({"message" : "Stock saved into user portfolio"}, status=status.HTTP_201_CREATED)
 
-    if request.method == "DELETE":
-        stock_id = request.DELETE.get("id")
-        portfolio_records = Portfolio.objects.filter(user_id=user_id, stock_id=stock_id)
-        for p in portfolio_records:
-            p.delete()             
-        return Response({"message" : "Stock(s) deleted from user portfolio"}, status=status.HTTP_200_OK)
-
     if request.method == "GET":
         portfolio = Portfolio.objects.filter(user_id=user_id)
         portfolio_all = []
@@ -354,3 +360,24 @@ def portfolio(request):
             portfolio_stock = Stock.objects.get(pk=p["stock_id"].id).serialize()
             portfolio_stocks.append(portfolio_stock)
         return JsonResponse({"portfolio_stocks" : portfolio_stocks})
+
+
+@api_view(['GET','POST','DELETE'])
+@permission_classes([IsAuthenticated])
+def portfolio_delete(request):
+
+    user_id = request.user.id
+
+    if request.method == "POST":
+        stock_id = request.data["id"]
+        try:
+            user = User.objects.get(pk=user_id)
+        except:
+            print("user not found")
+        try:
+            portfolio_records = Portfolio.objects.filter(user_id=user_id, stock_id=stock_id)
+        except:
+            print("stock not found")
+        for p in portfolio_records:
+            p.delete()             
+        return Response({"message" : "Stock(s) deleted from user portfolio"}, status=status.HTTP_200_OK)
