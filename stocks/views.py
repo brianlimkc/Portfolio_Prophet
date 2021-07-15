@@ -323,7 +323,7 @@ def watchlist_delete(request):
             w.delete()
         return Response({"message" : "Stock deleted from user watchlist"}, status=status.HTTP_200_OK)
 
-@api_view(['GET','POST','DELETE'])
+@api_view(['GET','POST'])
 @permission_classes([IsAuthenticated])
 def portfolio(request):
 
@@ -362,7 +362,7 @@ def portfolio(request):
         return JsonResponse({"portfolio_stocks" : portfolio_stocks})
 
 
-@api_view(['GET','POST','DELETE'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def portfolio_delete(request):
 
