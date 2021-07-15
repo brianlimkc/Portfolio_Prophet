@@ -29,14 +29,14 @@ def show_stock(request):
 
     stock_record = Stock.objects.get(symbol=stock)
     stock_record_json = stock_record.serialize()
-    historical_record = Historical_Stock_Data.objects.filter(stock_id = stock_record.id)
-    historical_record_all = [r.serialize() for r in historical_record]
+    # historical_record = Historical_Stock_Data.objects.filter(stock_id = stock_record.id)
+    # historical_record_all = [r.serialize() for r in historical_record]
     forecast_record = Forecast_Record.objects.filter(stock_id = stock_record.id)
     forecast_record_all = [r.serialize() for r in forecast_record]
 
     return JsonResponse({
         "stock_record": stock_record_json,
-        "historical_record" : historical_record_all,
+        # "historical_record" : historical_record_all,
         "forecast_record" : forecast_record_all
         })
 
@@ -350,12 +350,28 @@ def portfolio(request):
     if request.method == "GET":
         portfolio = Portfolio.objects.filter(user_id=user_id)
         portfolio_stocks = []
-        for p in portfolio:
-            portfolio_record = p.serialize()
-            portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
-            portfolio_stocks.append(portfolio_stock)
+        portfolio_records = []
+        # portfolio_combi_records = []
+        # for p in portfolio:
+        #     portfolio_record = p.serialize()
+        #     portfolio_records.append(portfolio_record)
+        #     portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
+        #     portfolio_stocks.append(portfolio_stock)
+        #     portfolio_combi_record = {
+        #         "name" : portfolio_stock["name"],
+        #         "symbol" : portfolio_stock["symbol"],
+        #         "mkt_price" : portfolio_stock["currentPrice"],
+        #         "purchase_price" : portfolio_record["price"],
+        #         "quantity" : portfolio_record["quantity"],
+        #         "date" : portfolio_record["date"],
+        #     }
+        #     portfolio_combi_records.append(portfolio_combi_record)
 
-        return JsonResponse({"portfolio_stocks" : portfolio_stocks})
+        return JsonResponse({
+            "portfolio_stocks" : portfolio_stocks, 
+            "portfolio_records" : portfolio_records,
+            # "portfolio_combi_records" : portfolio_combi_records,
+            })
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
