@@ -284,11 +284,13 @@ def watchlist(request):
             stock = Stock.objects.get(pk=stock_id)
         except:
             print("stock not found")
-        watchlist_record = Watchlist(
-            user_id = user,
-            stock_id = stock,
-        )
-        watchlist_record.save()
+
+        if len(Watchlist.objects.filter(user_id=user_id,stock_id=stock_id)) == 0:
+            watchlist_record = Watchlist(
+                user_id = user,
+                stock_id = stock,
+            )
+            watchlist_record.save()
         return Response({"message" : "Stock saved into user watchlist"}, status=status.HTTP_201_CREATED)
 
     if request.method == "GET":
