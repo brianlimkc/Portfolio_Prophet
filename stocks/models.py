@@ -117,7 +117,7 @@ class Portfolio(models.Model):
             "stock_id" : self.stock_id,
             "quantity" : self.quantity,
             "price" : self.price,
-            "trans_date" : self.trans_date,
+            "date" : self.date,
         }
 
 class Historical_Stock_Data(models.Model):
