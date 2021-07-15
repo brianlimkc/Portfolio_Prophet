@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import *
-import serializers
+
 import uuid
 
 # Create your models here.
@@ -115,7 +115,7 @@ class Portfolio(models.Model):
     def serialize(self):
         return {
             "user" : self.user_id,
-            # "stock_id" : self.stock_id,
+            "stock_id" : self.stock_id,
             "quantity" : self.quantity,
             "price" : self.price,
             "date" : self.date,

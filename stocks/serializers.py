@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from stocks.models import *
 
-
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock

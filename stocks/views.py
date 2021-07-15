@@ -351,33 +351,33 @@ def portfolio(request):
         portfolio = Portfolio.objects.filter(user_id=user_id)
         portfolio_stocks = []
         portfolio_records = []
-        portfolio_combi_records = []
-        for p in portfolio:
-            print("NEVER AGAIN")
-            print(p)
-            portfolio_record = p.serialize()
-            print("Haaaaaaaaaaaaaaaaaalp")
-            print(portfolio_record)
-            portfolio_records.append(portfolio_record)
-            #portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
-            print("DJANASDFASODF")
-            #print(portfolio_stock)
-            #portfolio_stocks.append(portfolio_stock)
 
-        #     portfolio_combi_record = {
-        #         "name" : portfolio_stock["name"],
-        #         "symbol" : portfolio_stock["symbol"],
-        #         "mkt_price" : portfolio_stock["currentPrice"],
-        #         "purchase_price" : portfolio_record["price"],
-        #         "quantity" : portfolio_record["quantity"],
-        #         "date" : portfolio_record["date"],
-        #     }
-        #     portfolio_combi_records.append(portfolio_combi_record)
+        stock_dict = {}
+        for p in portfolio:
+
+            portfolio_record = p.serialize()
+
+            portfolio_dict = {
+                "user": portfolio_record["user"].id,
+                "stock": portfolio_record["stock_id"].id,
+                "quantity": portfolio_record["quantity"],
+                "price": portfolio_record["price"],
+                "date": portfolio_record["date"],
+            }
+#             print(portfolio_dict)
+
+            portfolio_records.append(portfolio_dict)
+
+            portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
+            if str(portfolio_stock["id"]) not in stock_dict:
+                stock_dict[str(portfolio_stock["id"])] = portfolio_stock
+
+            print(stock_dict)
 
         return Response({
-            #"portfolio_stocks" : portfolio_stocks,
+            "stock_dict" : stock_dict,
             "portfolio_records" : portfolio_records,
-            # "portfolio_combi_records" : portfolio_combi_records,
+
             }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
