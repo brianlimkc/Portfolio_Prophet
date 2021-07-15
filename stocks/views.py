@@ -156,9 +156,9 @@ def populate_stock_history(request):
 
 def populate_stocksdb(requests):
     symbols = [
-        # "AAPL",
-        # "ADBE",
-        # "ADI",
+        "AAPL",
+        "ADBE",
+        "ADI",
         # "ADP",
         # "ADSK",
         # "AEP",

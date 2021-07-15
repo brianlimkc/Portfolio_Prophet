@@ -1,10 +1,10 @@
 from django_cron import CronJobBase, Schedule
-from portfolio_test.views import populate_stock_history
+from stocks.views import populate_stock_history
 
 
 class MyCronJob(CronJobBase):
 
-    RUN_AT_TIMES = ['2:00']
+    RUN_AT_TIMES = ['15:15']
 
     print("inside cron")
 
@@ -12,5 +12,5 @@ class MyCronJob(CronJobBase):
     
     code = 'portfolio_prophet.cron.MyCronJob'    # a unique code
 
-    populate_stock_history('')
+    populate_stock_history("")
         
