@@ -46,7 +46,7 @@ class Stock(models.Model):
         "industry" : self.industry,
         "marketCap" : float(self.market_cap),
         "currentPrice" : float(self.current_price),
-        "volume" : float(self.volume),        
+        "volume" : float(self.volume),
         "high" : float(self.prev_high),
         "low" : float(self.prev_low),
         "price_change" : float(self.price_change),
@@ -75,17 +75,17 @@ class Watchlist(models.Model):
     )
 
     user_id = models.ForeignKey(
-        User, 
-        on_delete=models.CASCADE, 
+        User,
+        on_delete=models.CASCADE,
         related_name="watchlist_user")
-        
+
     stock_id = models.ForeignKey(
-        Stock, 
-        on_delete=models.CASCADE, 
+        Stock,
+        on_delete=models.CASCADE,
         related_name="watchlist_stock")
 
     def serialize(self):
-        return {            
+        return {
             "user_id" : self.user_id,
             "stock_id" : self.stock_id
         }
@@ -98,21 +98,21 @@ class Portfolio(models.Model):
     )
 
     user_id = models.ForeignKey(
-        User, 
-        on_delete=models.CASCADE, 
+        User,
+        on_delete=models.CASCADE,
         related_name="portfolio_user")
-        
+
     stock_id = models.ForeignKey(
-        Stock, 
-        on_delete=models.CASCADE, 
+        Stock,
+        on_delete=models.CASCADE,
         related_name="portfolio_stock")
 
     quantity = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     price = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
-    trans_date = models.DateTimeField()
+    date = models.DateTimeField()
 
     def serialize(self):
-        return {            
+        return {
             "user" : self.user_id,
             "stock_id" : self.stock_id,
             "quantity" : self.quantity,
@@ -128,8 +128,8 @@ class Historical_Stock_Data(models.Model):
     )
 
     stock_id = models.ForeignKey(
-        Stock, 
-        on_delete=models.CASCADE, 
+        Stock,
+        on_delete=models.CASCADE,
         related_name="stock_forecast_id")
 
     date_recorded = models.DateTimeField()
@@ -152,15 +152,15 @@ class Forecast_Record(models.Model):
         default=uuid.uuid4
     )
     stock_id = models.ForeignKey(
-        Stock, 
-        on_delete=models.CASCADE, 
+        Stock,
+        on_delete=models.CASCADE,
         related_name="stock_data_id")
     date = models.DateTimeField()
     yhat = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     yhat_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     yhat_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     price = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
-    
+
     def serialize(self):
         return {
         "date" : self.date.date(),
