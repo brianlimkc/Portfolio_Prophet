@@ -50,8 +50,7 @@ INSTALLED_APPS = [
     'corsheaders',
     "django_cron",
     'rest_framework',
-    'rest_framework_simplejwt',
-    'django_rename_app',
+    'rest_framework_simplejwt',    
     'stocks',
 ]
 
