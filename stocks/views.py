@@ -342,7 +342,7 @@ def portfolio(request):
             stock_id = stock,
             quantity = request.data['quantity'],
             price = request.data['price'],
-            date = request.data['date'],
+            trans_date = request.data['date'],
         )
         portfolio_record.save()
         return Response({"message" : "Stock saved into user portfolio"}, status=status.HTTP_201_CREATED)
