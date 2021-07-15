@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import *
 import uuid
 
 # Create your models here.
@@ -39,12 +40,13 @@ class Stock(models.Model):
 
     def serialize(self):
         return {
+        "id" : self.id,
         "name" : self.name,
         "symbol" : self.symbol,
         "industry" : self.industry,
         "marketCap" : float(self.market_cap),
         "currentPrice" : float(self.current_price),
-        "volume" : float(self.volume),        
+        "volume" : float(self.volume),
         "high" : float(self.prev_high),
         "low" : float(self.prev_low),
         "price_change" : float(self.price_change),
@@ -65,6 +67,58 @@ class Stock(models.Model):
         "yhat_365_advice" : self.yhat_365_advice,
         "yhat_365_ratio" : float(round(((self.yhat_365 - self.current_price) / self.yhat_365),2)),
         }
+class Watchlist(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4
+    )
+
+    user_id = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="watchlist_user")
+
+    stock_id = models.ForeignKey(
+        Stock,
+        on_delete=models.CASCADE,
+        related_name="watchlist_stock")
+
+    def serialize(self):
+        return {
+            "user_id" : self.user_id,
+            "stock_id" : self.stock_id
+        }
+
+class Portfolio(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4
+    )
+
+    user_id = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="portfolio_user")
+
+    stock_id = models.ForeignKey(
+        Stock,
+        on_delete=models.CASCADE,
+        related_name="portfolio_stock")
+
+    quantity = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
+    price = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
+    date = models.DateTimeField()
+
+    def serialize(self):
+        return {
+            "user" : self.user_id,
+            "stock_id" : self.stock_id,
+            "quantity" : self.quantity,
+            "price" : self.price,
+            "date" : self.date,
+        }
 
 class Historical_Stock_Data(models.Model):
     id = models.UUIDField(
@@ -74,8 +128,8 @@ class Historical_Stock_Data(models.Model):
     )
 
     stock_id = models.ForeignKey(
-        Stock, 
-        on_delete=models.CASCADE, 
+        Stock,
+        on_delete=models.CASCADE,
         related_name="stock_forecast_id")
 
     date_recorded = models.DateTimeField()
@@ -98,15 +152,15 @@ class Forecast_Record(models.Model):
         default=uuid.uuid4
     )
     stock_id = models.ForeignKey(
-        Stock, 
-        on_delete=models.CASCADE, 
+        Stock,
+        on_delete=models.CASCADE,
         related_name="stock_data_id")
     date = models.DateTimeField()
     yhat = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     yhat_upper = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     yhat_lower = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     price = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
-    
+
     def serialize(self):
         return {
         "date" : self.date.date(),

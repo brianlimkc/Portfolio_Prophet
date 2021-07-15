@@ -2,11 +2,14 @@ from django.shortcuts import render
 import yfinance as yf
 from prophet import Prophet
 import datetime
-from portfolio_test.models import *
+from stocks.models import *
+from accounts.models import *
 from django.http.response import JsonResponse
-from portfolio_test.serializers import *
-
-
+from stocks.serializers import *
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
 # Create your views here.
 def show_stock(request):
@@ -16,7 +19,7 @@ def show_stock(request):
     if stock==None:
         stock="GOOG"
 
-    try: 
+    try:
         stock_record = Stock.objects.get(symbol=stock)
     except Stock.DoesNotExist:
         new_stock = Stock(symbol = stock)
@@ -29,7 +32,7 @@ def show_stock(request):
     historical_record = Historical_Stock_Data.objects.filter(stock_id = stock_record.id)
     historical_record_all = [r.serialize() for r in historical_record]
     forecast_record = Forecast_Record.objects.filter(stock_id = stock_record.id)
-    forecast_record_all = [r.serialize() for r in forecast_record]        
+    forecast_record_all = [r.serialize() for r in forecast_record]
 
     return JsonResponse({
         "stock_record": stock_record_json,
@@ -38,19 +41,18 @@ def show_stock(request):
         })
 
 
-        
 def show_all(request):
     stock_record = Stock.objects.all()
     stock_record_all = [s.serialize() for s in stock_record]
 
     return JsonResponse({
-        "stock_record_all": stock_record_all,        
+        "stock_record_all": stock_record_all,
         })
 
 
 def populate_stock(stock):
 
-    ticker = yf.Ticker(stock.symbol).info    
+    ticker = yf.Ticker(stock.symbol).info
 
     print(ticker["shortName"])
 
@@ -73,25 +75,11 @@ def populate_history(stock):
     start_date = end_date - datetime.timedelta(days=2*365)
     delta = datetime.timedelta(days=1)
     period = 1 * 365
-      
+
     data = yf.download(stock.symbol, start_date, end_date)
-  
-    # while start_date <= end_date:
-    #     data_row = data[data.index==str(start_date)]                       
-    #     close = data_row["Close"].values.tolist()
-    #     for close_price in close:  
-    #         record = Historical_Stock_Data(
-    #             stock_id = stock,
-    #             date_recorded = start_date,
-    #             price_close = close_price
-    #         )
-            
-    #         record.save()
 
-    #     start_date += delta
-
-    data.reset_index(inplace=True)  
-    df_train = data[['Date','Close']]    
+    data.reset_index(inplace=True)
+    df_train = data[['Date','Close']]
 
     df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
 
@@ -102,16 +90,16 @@ def populate_history(stock):
     forecast_length = forecast.shape[0]
 
     for index in range(forecast_length):
-        data_row = forecast[forecast.index == index]        
+        data_row = forecast[forecast.index == index]
         fdate = data_row["ds"].values.tolist()
         yhat = data_row["yhat"].values.tolist()
         yhat_upper = data_row["yhat_upper"].values.tolist()
         yhat_lower = data_row["yhat_lower"].values.tolist()
 
         date = datetime.datetime.fromtimestamp(fdate[0]/1000000000)
-        data_row = data[data.index==index]["Close"]                                    
+        data_row = data[data.index==index]["Close"]
 
-        try: 
+        try:
             priceR = float(data_row)
         except:
             priceR = 0
@@ -120,14 +108,14 @@ def populate_history(stock):
 
         forecast_record = Forecast_Record(
             stock_id = stock,
-            date = date,                
+            date = date,
             yhat = yhat[0],
             yhat_upper = yhat_upper[0],
             yhat_lower = yhat_lower[0],
             price = priceR,
         )
 
-        forecast_record.save()         
+        forecast_record.save()
 
     stock.yhat_30 = round(forecast["yhat"][forecast_length-335],2)
     stock.yhat_30_upper = round(forecast["yhat_upper"][forecast_length-335],2)
@@ -144,7 +132,6 @@ def populate_history(stock):
     stock.save()
 
 
-    
 def recommendation(price,yhat_upper,yhat_lower):
     if price < yhat_lower:
         return "BUY"
@@ -153,29 +140,32 @@ def recommendation(price,yhat_upper,yhat_lower):
     else:
         return "HOLD"
 
-  
+
 def populate_stock_history(request):
 
     Historical_Stock_Data.objects.all().delete()
     Forecast_Record.objects.all().delete()
 
     stocks = Stock.objects.all()
-    for stock in stocks:        
+    for stock in stocks:
         populate_stock(stock)
         populate_history(stock)
-    
+
+    return Response({"message" : "Stock info fetched and populated"}, status=status.HTTP_200_OK)
+
+
 def populate_stocksdb(requests):
     symbols = [
         "AAPL",
         "ADBE",
         "ADI",
-        "ADP",
-        "ADSK",
-        "AEP",
-        "ALGN",
-        "ALXN",
-        "AMAT",
-        "AMD",
+        # "ADP",
+        # "ADSK",
+        # "AEP",
+        # "ALGN",
+        # "ALXN",
+        # "AMAT",
+        # "AMD",
         # "AMGN",
         # "AMZN",
         # "ANSS",
@@ -276,7 +266,113 @@ def populate_stocksdb(requests):
         )
         stock.save()
 
-    
+    return Response({"message" : "Stocks inserted into DB"}, status=status.HTTP_200_OK)
 
 
 
+@api_view(['GET','POST'])
+@permission_classes([IsAuthenticated])
+def watchlist(request):
+    user_id = request.user.id
+    if request.method == "POST":
+        stock_id = request.data["id"]
+        try:
+            user = User.objects.get(pk=user_id)
+        except:
+            print("user not found")
+        try:
+            stock = Stock.objects.get(pk=stock_id)
+        except:
+            print("stock not found")
+
+        if len(Watchlist.objects.filter(user_id=user_id,stock_id=stock_id)) == 0:
+            watchlist_record = Watchlist(
+                user_id = user,
+                stock_id = stock,
+            )
+            watchlist_record.save()
+        return Response({"message" : "Stock saved into user watchlist"}, status=status.HTTP_201_CREATED)
+
+
+    if request.method == "GET":
+        watchlist = Watchlist.objects.filter(user_id=user_id)
+        watchlist_stocks = []
+        for w in watchlist:
+            watchlist_record = w.serialize()
+            watchlist_stock = Stock.objects.get(pk=watchlist_record["stock_id"].id).serialize()
+            watchlist_stocks.append(watchlist_stock)
+        return JsonResponse({"watchlist_stocks" : watchlist_stocks})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def watchlist_delete(request):
+    user_id = request.user.id
+    if request.method == "POST":
+        stock_id = request.data["id"]
+        try:
+            user = User.objects.get(pk=user_id)
+        except:
+            print("user not found")
+        try:
+            watchlist = Watchlist.objects.filter(user_id=user_id, stock_id=stock_id)
+        except:
+            print("stock not found")
+        for w in watchlist:
+            w.delete()
+        return Response({"message" : "Stock deleted from user watchlist"}, status=status.HTTP_200_OK)
+
+@api_view(['GET','POST'])
+@permission_classes([IsAuthenticated])
+def portfolio(request):
+
+    user_id = request.user.id
+
+    if request.method == "POST":
+        stock_id = request.data["id"]
+        try:
+            user = User.objects.get(pk=user_id)
+        except:
+            print("user not found")
+        try:
+            stock = Stock.objects.get(pk=stock_id)
+        except:
+            print("stock not found")
+        portfolio_record = Portfolio(
+            user_id = user,
+            stock_id = stock,
+            quantity = request.data['quantity'],
+            price = request.data['price'],
+            date = request.data['date'],
+        )
+        portfolio_record.save()
+        return Response({"message" : "Stock saved into user portfolio"}, status=status.HTTP_201_CREATED)
+
+    if request.method == "GET":
+        portfolio = Portfolio.objects.filter(user_id=user_id)
+        portfolio_stocks = []
+        for p in portfolio:
+            portfolio_record = p.serialize()
+            portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
+            portfolio_stocks.append(portfolio_stock)
+
+        return JsonResponse({"portfolio_stocks" : portfolio_stocks})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def portfolio_delete(request):
+
+    user_id = request.user.id
+
+    if request.method == "POST":
+        stock_id = request.data["id"]
+        try:
+            user = User.objects.get(pk=user_id)
+        except:
+            print("user not found")
+        try:
+            portfolio_records = Portfolio.objects.filter(user_id=user_id, stock_id=stock_id)
+        except:
+            print("stock not found")
+        for p in portfolio_records:
+            p.delete()
+        return Response({"message" : "Stock(s) deleted from user portfolio"}, status=status.HTTP_200_OK)
