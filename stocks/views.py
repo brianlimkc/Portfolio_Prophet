@@ -351,12 +351,19 @@ def portfolio(request):
         portfolio = Portfolio.objects.filter(user_id=user_id)
         portfolio_stocks = []
         portfolio_records = []
-        # portfolio_combi_records = []
-        # for p in portfolio:
-        #     portfolio_record = p.serialize()
-        #     portfolio_records.append(portfolio_record)
-        #     portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
-        #     portfolio_stocks.append(portfolio_stock)
+        portfolio_combi_records = []
+        for p in portfolio:
+            print("NEVER AGAIN")
+            print(p)
+            portfolio_record = p.serialize()
+            print("Haaaaaaaaaaaaaaaaaalp")
+            print(portfolio_record)
+            portfolio_records.append(portfolio_record)
+            #portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
+            print("DJANASDFASODF")
+            #print(portfolio_stock)
+            #portfolio_stocks.append(portfolio_stock)
+
         #     portfolio_combi_record = {
         #         "name" : portfolio_stock["name"],
         #         "symbol" : portfolio_stock["symbol"],
@@ -367,11 +374,11 @@ def portfolio(request):
         #     }
         #     portfolio_combi_records.append(portfolio_combi_record)
 
-        return JsonResponse({
-            "portfolio_stocks" : portfolio_stocks, 
+        return Response({
+            #"portfolio_stocks" : portfolio_stocks,
             "portfolio_records" : portfolio_records,
             # "portfolio_combi_records" : portfolio_combi_records,
-            })
+            }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
