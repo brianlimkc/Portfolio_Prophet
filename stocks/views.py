@@ -304,6 +304,9 @@ def watchlist(request):
         watchlist_stocks = []
         for w in watchlist_all:
             watchlist_stock = Stock.objects.get(pk=w["stock_id"].id).serialize()
+        for w in watchlist:
+            watchlist_record = w.serialize()
+            watchlist_stock = Stock.objects.get(pk=watchlist_record["stock_id"].id).serialize()
             watchlist_stocks.append(watchlist_stock)
         return JsonResponse({"watchlist_stocks" : watchlist_stocks})
 
@@ -342,7 +345,7 @@ def portfolio(request):
         except:
             print("stock not found")
         portfolio_record = Portfolio(
-            user_id = user_id,
+            user_id = user,
             stock_id = stock_id,
             quantity = request.data['quantity'],
             price = request.data['price'],
@@ -353,16 +356,13 @@ def portfolio(request):
 
     if request.method == "GET":
         portfolio = Portfolio.objects.filter(user_id=user_id)
-        portfolio_all = []
-        for p in portfolio:
-            portfolio_all.append(p.serialize())
-        print(portfolio_all)
         portfolio_stocks = []
-        for p in portfolio_all:
-            portfolio_stock = Stock.objects.get(pk=p["stock_id"].id).serialize()
+        for p in portfolio:
+            portfolio_record = p.serialize()
+            portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
             portfolio_stocks.append(portfolio_stock)
+            
         return JsonResponse({"portfolio_stocks" : portfolio_stocks})
-
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
