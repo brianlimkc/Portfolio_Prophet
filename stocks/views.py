@@ -350,8 +350,10 @@ def portfolio(request):
     if request.method == "GET":
         portfolio = Portfolio.objects.filter(user_id=user_id)
         portfolio_stocks = []
+        portfolio_records = []
         for p in portfolio:
             portfolio_record = p.serialize()
+            portfolio_records.append(portfolio_record)
             portfolio_stock = Stock.objects.get(pk=portfolio_record["stock_id"].id).serialize()
             portfolio_stocks.append(portfolio_stock)
 
