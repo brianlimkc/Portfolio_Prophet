@@ -83,7 +83,7 @@ def populate_history(stock):
 
     df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
 
-    m = Prophet()
+    m = Prophet(weekly_seasonality=FALSE)
     m.fit(df_train)
     future = m.make_future_dataframe(periods=period)
     forecast = m.predict(future)
