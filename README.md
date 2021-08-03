@@ -1,10 +1,10 @@
-# Project 4 - Portfolio Prophet
+# Portfolio Prophet (Group Project)
 
 ## Description
 
 A fully responsive stock portfolio tracking and forecast app, which leverages Facebook Prophet to provide basic forecasts of whether you should hold, buy or sell a stock.
 
-Link to the repo for the front end here - 
+Link to the repo for the front end here - https://github.com/brianlimkc/Portfolio_Prophet_FrontEnd
 
 Try it out here - https://portfolio-prophet.herokuapp.com/
 
