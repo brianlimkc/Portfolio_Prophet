@@ -4,6 +4,8 @@
 
 A fully responsive stock portfolio tracking and forecast app, which leverages Facebook Prophet to provide basic forecasts of whether you should hold, buy or sell a stock.
 
+Link to the repo for the front end here - 
+
 Try it out here - https://portfolio-prophet.herokuapp.com/
 
 ### Tech Used
@@ -79,6 +81,5 @@ Once the forecast is made from Prophet, we store the recommendation into the Rec
 ### Credits
 
 I would like to thank Ebere and Isaac for their support and encouragement for this project!
-![Screenshot 2021-07-29 at 1 31 20 PM](https://user-images.githubusercontent.com/76930093/127991734-8372a1ee-ce34-48dc-b638-84235745fae1.png)
 
 
